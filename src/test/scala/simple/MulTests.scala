@@ -30,12 +30,12 @@ class MulTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
     test(new Mul) { dut =>
       // 边界值测试
       val edgeCases = Seq(
-        ((0, 0), 0),    // 最小输入
+        ((0, 0), 0), // 最小输入
         ((15, 15), 225), // 最大输入
-        ((0, 15), 0),    // 零乘数
-        ((15, 0), 0),    // 零被乘数
-        ((1, 15), 15),   // 边界值1
-        ((15, 1), 15)    // 边界值2
+        ((0, 15), 0), // 零乘数
+        ((15, 0), 0), // 零被乘数
+        ((1, 15), 15), // 边界值1
+        ((15, 1), 15) // 边界值2
       )
 
       edgeCases.foreach { case ((x, y), expected) =>
@@ -47,21 +47,16 @@ class MulTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
+
   it should "work with random inputs" in {
-    test(new Mul).withAnnotations(Seq(VerilatorBackendAnnotation)) { dut =>
-      val rnd = new scala.util.Random(42) // 固定随机种子以便复现
-
-      // 随机测试100个案例
-      (1 to 100).foreach { _ =>
-        val x = rnd.nextInt(16)
-        val y = rnd.nextInt(16)
-        val expected = x * y
-
+    test(new Mul).withAnnotations(Seq(VerilatorBackendAnnotation, WriteVcdAnnotation)) { dut =>
+      for (x <- 0 until 16; y <- 0 until 16) {
         dut.io.x.poke(x.U)
         dut.io.y.poke(y.U)
         dut.clock.step()
-        dut.io.z.expect(expected.U,
-          s"Random test failed: $x * $y should be $expected")
+
+        val expected = x * y
+        dut.io.z.expect(expected.U, s"Failed for $x * $y, expected $expected")
       }
     }
   }

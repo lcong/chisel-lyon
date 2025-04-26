@@ -1,6 +1,7 @@
 package simple
 
 import chisel3._
+import firrtl.stage.FirrtlStage
 
 class Adder4Bit extends Module {
   val io = IO(new Bundle {

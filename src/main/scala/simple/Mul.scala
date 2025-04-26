@@ -15,17 +15,9 @@ class Mul extends Module {
     val y   = Input(UInt(4.W))
     val z   = Output(UInt(8.W))
   })
-  // 使用Seq而不是ArrayBuffer
-  val mulsValues = Seq.tabulate(16, 16) { (i, j) =>
-    (i * j).U(8.W)
-  }.flatten // 将二维Seq展平为一维
 
-  // 使用VecInit创建查找表
-  val tbl = VecInit(mulsValues)
-
-  // 计算索引: x * 16 + y
-  val index = (io.x << 4.U) | io.y
-  io.z := tbl(index)
+  // Perform multiplication
+  io.z := io.x * io.y
 
 }
 
