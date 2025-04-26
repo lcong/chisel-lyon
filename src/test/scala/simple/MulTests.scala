@@ -5,7 +5,7 @@ import chiseltest._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class MulTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
+class MulTester extends AnyFlatSpec with ChiselScalatestTester with Matchers {
   behavior of "Mul (4x4 multiplier using LUT)"
 
   it should "correctly multiply all combinations of 4-bit inputs" in {

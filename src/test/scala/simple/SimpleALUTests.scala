@@ -6,7 +6,7 @@ import chiseltest._
 import org.scalatest.flatspec.AnyFlatSpec
 import scala.util.Random
 
-class SimpleALUTests extends AnyFlatSpec with ChiselScalatestTester {
+class SimpleALUTester extends AnyFlatSpec with ChiselScalatestTester {
   behavior of "SimpleALU"
 
   it should "perform correct math operations with random inputs" in {
