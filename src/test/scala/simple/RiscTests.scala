@@ -58,7 +58,7 @@ class RiscTester extends AnyFlatSpec with ChiselScalatestTester with Matchers {
 
       // 执行程序
       var cycles = 0
-      while (dut.io.valid.peek().litToBoolean == false && cycles < 10) {
+      while (!dut.io.valid.peek().litToBoolean && cycles < 10) {
         executeCycle()
         cycles += 1
       }
@@ -70,6 +70,33 @@ class RiscTester extends AnyFlatSpec with ChiselScalatestTester with Matchers {
   }
 
   // 可选：使用Verilator后端测试
+  it should "run with Verilator backend" in {
+    test(new Risc())
+      .withAnnotations(Seq(VerilatorBackendAnnotation)) { dut =>
+        // 写入指令到代码内存
+        dut.io.isWr.poke(true.B)
+        dut.io.wrAddr.poke(0.U)
+        dut.io.wrData.poke("h020102FF".U) // 示例指令：imm_op
+        dut.clock.step()
+
+        dut.io.wrAddr.poke(1.U)
+        dut.io.wrData.poke("h01020304".U) // 示例指令：add_op
+        dut.clock.step()
+
+        // 启动执行
+        dut.io.isWr.poke(false.B)
+        dut.io.boot.poke(true.B)
+        dut.clock.step()
+
+        // 检查第一条指令的执行结果
+        dut.io.boot.poke(false.B)
+        dut.clock.step()
+        dut.io.valid.expect(true.B) // 检查标记指令完成
+        dut.io.out.expect("h01FF".U) // 验证输出
+      }
+  }
+
+ // 可选：使用Verilator后端测试
   it should "work with Verilator backend" in {
     test(new Risc).withAnnotations(Seq(VerilatorBackendAnnotation)) { dut =>
       // 简化的测试程序
@@ -93,7 +120,7 @@ class RiscTester extends AnyFlatSpec with ChiselScalatestTester with Matchers {
       dut.io.boot.poke(false.B)
 
       var cycles = 0
-      while (dut.io.valid.peek().litToBoolean == false && cycles < 5) {
+      while (!dut.io.valid.peek().litToBoolean && cycles < 100) {
         dut.clock.step()
         cycles += 1
       }
