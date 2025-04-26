@@ -1,3 +1,5 @@
+package simple
+
 import chisel3._
 
 class Adder4Bit extends Module {
@@ -12,6 +14,6 @@ class Adder4Bit extends Module {
 
 
 
-object Adder4Bit extends App {
+object Adder4BitApp extends App {
   (new chisel3.stage.ChiselStage).emitVerilog(new Adder4Bit(),Array("--target-dir","generated"))
 }
