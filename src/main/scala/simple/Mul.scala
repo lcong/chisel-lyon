@@ -25,6 +25,6 @@ class Mul extends Module {
 /**
  * An object extending App to generate the Verilog code.
  */
-object Mul extends App {
+object MulApp extends App {
   (new chisel3.stage.ChiselStage).emitVerilog(new Mul(),Array("--target-dir","generated"))
 }

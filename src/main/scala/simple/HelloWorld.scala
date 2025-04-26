@@ -32,6 +32,6 @@ class HelloWorld extends Module {
 /**
  * An object extending App to generate the Verilog code.
  */
-object HelloWorld extends App {
+object HelloWorldApp extends App {
   (new chisel3.stage.ChiselStage).emitVerilog(new HelloWorld(),Array("--target-dir","generated"))
 }

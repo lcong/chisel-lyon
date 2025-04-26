@@ -23,6 +23,6 @@ class ByteSelector extends Module {
 
 
 
-object ByteSelector extends App {
+object ByteSelectorApp extends App {
   (new chisel3.stage.ChiselStage).emitVerilog(new ByteSelector(),Array("--target-dir","generated"))
 }

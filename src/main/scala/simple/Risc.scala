@@ -54,6 +54,6 @@ class Risc(val memSize: Int = 256) extends Module {
 /**
  * An object extending App to generate the Verilog code.
  */
-object Risc extends App {
+object RiscApp extends App {
   (new chisel3.stage.ChiselStage).emitVerilog(new Risc(memSize = 128),Array("--target-dir","generated"))
 }
