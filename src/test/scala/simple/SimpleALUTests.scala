@@ -67,4 +67,31 @@ class SimpleALUTester extends AnyFlatSpec with ChiselScalatestTester {
       }
     }
   }
+
+  // 可选：使用Verilator后端测试
+  it should "work with generate VCD " in {
+    test(new SimpleALU).withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
+      val rnd = new Random(42)
+
+      // 测试10组随机输入
+      for (_ <- 0 until 10) {
+        val a = rnd.nextInt(16)
+        val b = rnd.nextInt(16)
+        val opcode = rnd.nextInt(4)
+
+        val expected = opcode match {
+          case 0 => (a + b) & 0xF
+          case 1 => (a - b) & 0xF
+          case 2 => a
+          case 3 => b
+        }
+
+        dut.io.a.poke(a.U)
+        dut.io.b.poke(b.U)
+        dut.io.opcode.poke(opcode.U)
+        dut.clock.step()
+        dut.io.out.expect(expected.U)
+      }
+    }
+  }
 }
